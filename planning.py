@@ -1,7 +1,12 @@
-###############################################################################
-#                       Recuperation donnes Plannings AM2
-#                           Florian 11/2021
-###############################################################################
+"""
+    Projet : AM2_Auto / Planning
+    Date Creation : 07/12/2022
+    Date Revision : 28/08/2023
+    Entreprise : 3SC4P3
+    Auteur: Florian HOFBAUER
+    Contact :
+    But : Recupere les demandes restantes
+"""
 
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -35,29 +40,29 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
 
 
 # Option for website (no screen open)
-opt = Options()
-opt.add_argument('--headless')
+options = Options()
+options.add_argument('--headless')
 
 # Initiate the browser
-browser = webdriver.Chrome(ChromeDriverManager().install(), options=opt)
+browser = webdriver.Chrome(options=options)
 
 # Open the Website
 browser.get('https://www.airlines-manager.com/network/planning')
 
 # Your  credentials
-name = 'flohofbauer@icloud.com';
-mdp = 'Flo17Titi!';
+name = 'flohofbauer@icloud.com'
+mdp = 'Flo17Titi!'
 
 # Fill credentials
-browser.find_element(by=By.NAME, value='_username').send_keys(name);
-browser.find_element(by=By.NAME, value='_password').send_keys(mdp);
+browser.find_element(by=By.NAME, value='_username').send_keys(name)
+browser.find_element(by=By.NAME, value='_password').send_keys(mdp)
 
 # Click Log In
-browser.find_element(by=By.ID, value='loginSubmit').click();
+browser.find_element(by=By.ID, value='loginSubmit').click()
 time.sleep(5)
 
 # Click accept cookies
-browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click();
+browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
 # List of aircraft with number of line
@@ -110,7 +115,7 @@ nomAvion = [['aircraftId_81623210', 0],  # OMG-000
             ['aircraftId_79730109', 0],  # OMG-8
             ['aircraftId_79796961', 0]]  # OMG-9
 
-jour = ['Lundi', 'Mardi', 'Mecredi', 'Jeudi', 'Vendredi', 'Samedi', 'Diamnche'];
+jour = ['Lundi', 'Mardi', 'Mecredi', 'Jeudi', 'Vendredi', 'Samedi', 'Diamnche']
 
 # Copy info and start a CSV doc
 with open('demandePlanning.csv', 'w', newline='') as fichiercsv:
@@ -123,45 +128,37 @@ with open('demandePlanning.csv', 'w', newline='') as fichiercsv:
             if avion != 0:
                 # Each plane box contain 6 planes so if you have more than 6 planes, you need to change the page every 6 planes
                 browser.find_element(by=By.XPATH,
-                                     value="//div[@class='sliderRight' and @id='aircraftSliderRight']").click();
+                                     value="//div[@class='sliderRight' and @id='aircraftSliderRight']").click()
                 time.sleep(1)
         if avion != 0:
             # Access plane
-            accessAvion = "//div[@class='aircraftListMiniBox' and @id='" + str(nomAvion[avion][0]) + "']";
-            browser.find_element(by=By.XPATH, value=accessAvion).click();
-            time.sleep(2);
+            accessAvion = "//div[@class='aircraftListMiniBox' and @id='" + str(nomAvion[avion][0]) + "']"
+            browser.find_element(by=By.XPATH, value=accessAvion).click()
+            time.sleep(2)
 
-        recupLigne = browser.find_element(by=By.XPATH, value="//div[@id='lineList']").text;
-        nbLigne = 0;
+        recupLigne = browser.find_element(by=By.XPATH, value="//div[@id='lineList']").text
+        nbLigne = 0
         for position in range(len(recupLigne)):
             if recupLigne[position] == '-':
-                nbLigne = nbLigne + 1;
-        nomAvion[avion][1] = nbLigne;
+                nbLigne = nbLigne + 1
+        nomAvion[avion][1] = nbLigne
 
         for nLigne in range(nbLigne):
             # Select line
-            access = "//div[@id='lineList']/span[" + str(nLigne + 1) + ']';
-            browser.find_element(by=By.XPATH, value=access).click();
-            ligne = browser.find_element(by=By.XPATH, value=access).text;
+            access = "//div[@id='lineList']/span[" + str(nLigne + 1) + ']'
+            browser.find_element(by=By.XPATH, value=access).click()
+            ligne = browser.find_element(by=By.XPATH, value=access).text
 
-            indexLigne = ligne.find('-');
-            taille = len(ligne) - indexLigne;
+            indexLigne = ligne.find('-')
+            taille = len(ligne) - indexLigne
             for ligneN in range(taille):
                 ligne = ligne[:-1]
 
             writeTab = [[ligne + ';Eco'], [ligne + ';Affaire'], [ligne + ';First'], [ligne + ';Cargo']]
 
             # Line informations for each day
-            demand = browser.find_element(by=By.ID, value='demand').text;
-            index = [];
-            index.append(demand.find('Lundi'));
-            index.append(demand.find('Mardi'));
-            index.append(demand.find('Mercredi'));
-            index.append(demand.find('Jeudi'));
-            index.append(demand.find('Vendredi'));
-            index.append(demand.find('Samedi'));
-            index.append(demand.find('Dimanche'));
-            index.append(len(demand));
+            demand = browser.find_element(by=By.ID, value='demand').text
+            index = [demand.find('Lundi'), demand.find('Mardi'), demand.find('Mercredi'), demand.find('Jeudi'), demand.find('Vendredi'), demand.find('Samedi'), demand.find('Dimanche'), len(demand)]
 
             # Change format for CSV
             for semaine in range(7):
