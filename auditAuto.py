@@ -39,7 +39,7 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
 
 # Option for website (no screen open)
 options = Options()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 
 # Initiate the browser
 browser = webdriver.Chrome(options=options)
@@ -99,10 +99,10 @@ for tour in range(last):
 
         tarif = [elmt for elmt in recup if elmt.startswith("Tarif idéal")]
 
-        tarifEco = int(tarif[0].split(" : ")[1][:-1])
-        tarifAffaire = int(tarif[1].split(" : ")[1][:-1])
-        tarifFirst = int(tarif[2].split(" : ")[1][:-1])
-        tarifCargo = int(tarif[3].split(" : ")[1][:-1])
+        tarifEco = int(tarif[0].split(" : ")[1][:-1].replace(" ", ""))
+        tarifAffaire = int(tarif[1].split(" : ")[1][:-1].replace(" ", ""))
+        tarifFirst = int(tarif[2].split(" : ")[1][:-1].replace(" ", ""))
+        tarifCargo = int(tarif[3].split(" : ")[1][:-1].replace(" ", ""))
 
         input_element = browser.find_element(By.ID, "line_priceEco")
         input_element.clear()
@@ -124,7 +124,9 @@ for tour in range(last):
         nouvelle_valeur = tarifCargo
         input_element.send_keys(nouvelle_valeur)
 
-        browser.find_element(by=By.CLASS_NAME, value='validBtn validBtnBlue').click()
+        time.sleep(5)
+
+        browser.find_element(by=By.CLASS_NAME, value='validBtn').click()
         time.sleep(5)
 
         iteration += 1
