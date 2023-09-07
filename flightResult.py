@@ -18,7 +18,7 @@ import re
 
 
 # Print iterations progress
-def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
+def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd=""):
     """
     Call in a loop to create terminal progress bar
     @params:
@@ -116,170 +116,172 @@ sortie = []
 tableauDate = []
 volParDate = [0]
 tampon = 0
-with open('flightResult.csv', 'w', newline='') as fichiercsv:
-    writer = csv.writer(fichiercsv)
-    data = ['Jour Avion Ligne Depart/Arrivee Pax CA Resultats']
-    writer.writerow(data)
-    demand = ''
-    iteration = 0
-    printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
-    for tourner in range(3):
-        browser.find_element(by=By.CLASS_NAME, value='silverArrowLeft').click()
-        time.sleep(1)
-    for jour in range(6, 0, -1):
-        recherche = "//div[@class='blue' and 'J-" + str(jour) + "']"
-        rechercheDate = "J-" + str(jour)
-        rechercheData = browser.find_element(by=By.ID, value='showHubFlights').text
+fichiercsv = open('flightResult.csv', 'w', newline='')
 
-        date = ''
-        dateJour = rechercheData.find(rechercheDate)
-        for i in range(10):
-            date = date + rechercheData[dateJour + 4+i]
-        
-        site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date
-        browser.get(site)
-        tableauDate.append(date)
-        
-        demand = demand+browser.find_element(by=By.ID, value='showHubFlights').text
-        boucle = int(demand[len(demand)-6]) - 1
-        
-        for echo in range(boucle):
-            site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date + '&page=' + str(echo+2)
-            browser.get(site)
-            time.sleep(2)
-            demand = demand + browser.find_element(by=By.ID, value='showHubFlights').text
-            
-        result = [_.start() for _ in re.finditer('OMG-', demand)] 
-        resultTot = [_.start() for _ in re.finditer('Total', demand)] 
-        for retour in range(len(resultTot)-1):
-            result.append(resultTot[retour])
-        result.sort()
-        
-        anoter = []
-        for t in range(len(result)-1):
-            tps = result[t+1] - result[t]
-            st = " "
-            for tn in range(tps):
-                st = st + demand[result[t]+tn]
-            if len(st) < 100:
-                anoter.append(st)
-        
-        tps = resultTot[len(resultTot)-1] - result[len(result)-1]
-        st = ' '
-        
-        for tn in range(tps):
-            st = st + demand[result[len(result)-1]+tn]
-        if len(st) < 100:
-            anoter.append(st)
-        tampon = tampon + volParDate[len(volParDate)-1]
-        volParDate.append(len(anoter)-tampon)
-        iteration = iteration + 1
-        printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
-        
-    recherche = "//div[@class='blue' and 'Aujourd'hui]"
-    rechercheDate = "AUJOURD'HUI"
+writer = csv.writer(fichiercsv)
+data = ['Jour Avion Ligne Depart/Arrivee Pax CA Resultats']
+writer.writerow(data)
+demand = ''
+iteration = 0
+printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
+for tourner in range(3):
+    browser.find_element(by=By.CLASS_NAME, value='silverArrowLeft').click()
+    time.sleep(1)
+for jour in range(6, 0, -1):
+    recherche = "//div[@class='blue' and 'J-" + str(jour) + "']"
+    rechercheDate = "J-" + str(jour)
     rechercheData = browser.find_element(by=By.ID, value='showHubFlights').text
 
     date = ''
     dateJour = rechercheData.find(rechercheDate)
     for i in range(10):
-        date = date + rechercheData[dateJour + 12+i]
-    
+        date = date + rechercheData[dateJour + 4+i]
+
     site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date
     browser.get(site)
     tableauDate.append(date)
-    
+
     demand = demand+browser.find_element(by=By.ID, value='showHubFlights').text
     boucle = int(demand[len(demand)-6]) - 1
-    
+
     for echo in range(boucle):
         site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date + '&page=' + str(echo+2)
         browser.get(site)
         time.sleep(2)
         demand = demand + browser.find_element(by=By.ID, value='showHubFlights').text
-        
-    result = [_.start() for _ in re.finditer('OMG-', demand)] 
-    resultTot = [_.start() for _ in re.finditer('Total', demand)] 
-    for retour in range(len(resultTot) - 1):
+
+    result = [_.start() for _ in re.finditer('OMG-', demand)]
+    resultTot = [_.start() for _ in re.finditer('Total', demand)]
+    for retour in range(len(resultTot)-1):
         result.append(resultTot[retour])
     result.sort()
-    
+
     anoter = []
-    for t in range(len(result) - 1):
+    for t in range(len(result)-1):
         tps = result[t+1] - result[t]
-        st = ' '
+        st = " "
         for tn in range(tps):
             st = st + demand[result[t]+tn]
         if len(st) < 100:
             anoter.append(st)
-    
-    tps = resultTot[len(resultTot) - 1] - result[len(result) - 1]
-    st = " "
+
+    tps = resultTot[len(resultTot)-1] - result[len(result)-1]
+    st = ' '
+
     for tn in range(tps):
-        st = st + demand[result[len(result) - 1] + tn]
+        st = st + demand[result[len(result)-1]+tn]
     if len(st) < 100:
         anoter.append(st)
-    tampon = tampon + volParDate[len(volParDate) - 1]
+    tampon = tampon + volParDate[len(volParDate)-1]
     volParDate.append(len(anoter)-tampon)
-
     iteration = iteration + 1
     printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
-    
-    for tourner in range(3):
-        browser.find_element(by=By.CLASS_NAME, value='silverArrowRight').click()
-        time.sleep(1)
-    for jour in range(1, 7, +1):
-        recherche = "//div[@class='blue' and 'J-" + str(jour) + "']"
-        rechercheDate = "J+" + str(jour)
-        rechercheData = browser.find_element(by=By.ID, value='showHubFlights').text
 
-        date = ''
-        dateJour = rechercheData.find(rechercheDate)
-        for i in range(10):
-            date = date + rechercheData[dateJour + 4+i]
-        
-        site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date
+recherche = "//div[@class='blue' and 'Aujourd'hui]"
+rechercheDate = "AUJOURD'HUI"
+rechercheData = browser.find_element(by=By.ID, value='showHubFlights').text
+
+date = ''
+dateJour = rechercheData.find(rechercheDate)
+for i in range(10):
+    date = date + rechercheData[dateJour + 12+i]
+
+site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date
+browser.get(site)
+tableauDate.append(date)
+
+demand = demand+browser.find_element(by=By.ID, value='showHubFlights').text
+boucle = int(demand[len(demand)-6]) - 1
+
+for echo in range(boucle):
+    site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date + '&page=' + str(echo+2)
+    browser.get(site)
+    time.sleep(2)
+    demand = demand + browser.find_element(by=By.ID, value='showHubFlights').text
+
+result = [_.start() for _ in re.finditer('OMG-', demand)]
+resultTot = [_.start() for _ in re.finditer('Total', demand)]
+for retour in range(len(resultTot) - 1):
+    result.append(resultTot[retour])
+result.sort()
+
+anoter = []
+for t in range(len(result) - 1):
+    tps = result[t+1] - result[t]
+    st = ' '
+    for tn in range(tps):
+        st = st + demand[result[t]+tn]
+    if len(st) < 100:
+        anoter.append(st)
+
+tps = resultTot[len(resultTot) - 1] - result[len(result) - 1]
+st = " "
+for tn in range(tps):
+    st = st + demand[result[len(result) - 1] + tn]
+if len(st) < 100:
+    anoter.append(st)
+tampon = tampon + volParDate[len(volParDate) - 1]
+volParDate.append(len(anoter)-tampon)
+
+iteration = iteration + 1
+printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
+
+for tourner in range(3):
+    browser.find_element(by=By.CLASS_NAME, value='silverArrowRight').click()
+    time.sleep(1)
+for jour in range(1, 7, +1):
+    recherche = "//div[@class='blue' and 'J-" + str(jour) + "']"
+    rechercheDate = "J+" + str(jour)
+    rechercheData = browser.find_element(by=By.ID, value='showHubFlights').text
+
+    date = ''
+    dateJour = rechercheData.find(rechercheDate)
+    for i in range(10):
+        date = date + rechercheData[dateJour + 4+i]
+
+    site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date
+    browser.get(site)
+    tableauDate.append(date)
+
+    demand = demand+browser.find_element(by=By.ID, value='showHubFlights').text
+    boucle = int(demand[len(demand)-6]) - 1
+
+    for echo in range(boucle):
+        site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date + '&page=' + str(echo+2)
         browser.get(site)
-        tableauDate.append(date)
-        
-        demand = demand+browser.find_element(by=By.ID, value='showHubFlights').text
-        boucle = int(demand[len(demand)-6]) - 1
-        
-        for echo in range(boucle):
-            site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date + '&page=' + str(echo+2)
-            browser.get(site)
-            time.sleep(2)
-            demand = demand + browser.find_element(by=By.ID, value='showHubFlights').text
-            
-        result = [_.start() for _ in re.finditer('OMG-', demand)] 
-        resultTot = [_.start() for _ in re.finditer('Total', demand)] 
-        for retour in range(len(resultTot)-1):
-            result.append(resultTot[retour])
-        result.sort()
-        
-        anoter = []
-        for t in range(len(result)-1):
-            tps = result[t+1] - result[t]
-            st = " "
-            for tn in range(tps):
-                st = st + demand[result[t]+tn]
-            if len(st) < 100:
-                anoter.append(st)
-        
-        tps = resultTot[len(resultTot)-1] - result[len(result)-1]
-        st = ' '
+        time.sleep(2)
+        demand = demand + browser.find_element(by=By.ID, value='showHubFlights').text
+
+    result = [_.start() for _ in re.finditer('OMG-', demand)]
+    resultTot = [_.start() for _ in re.finditer('Total', demand)]
+    for retour in range(len(resultTot)-1):
+        result.append(resultTot[retour])
+    result.sort()
+
+    anoter = []
+    for t in range(len(result)-1):
+        tps = result[t+1] - result[t]
+        st = " "
         for tn in range(tps):
-            st = st + demand[result[len(result)-1]+tn]
+            st = st + demand[result[t]+tn]
         if len(st) < 100:
             anoter.append(st)
-        tampon = tampon + volParDate[len(volParDate)-1]
-        volParDate.append(len(anoter)-tampon)
-        iteration = iteration + 1
-        printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
 
-    final(anoter, volParDate, tableauDate)
-    for out in range(len(sortie)):
-        writer.writerow(sortie[out])
+    tps = resultTot[len(resultTot)-1] - result[len(result)-1]
+    st = ' '
+    for tn in range(tps):
+        st = st + demand[result[len(result)-1]+tn]
+    if len(st) < 100:
+        anoter.append(st)
+    tampon = tampon + volParDate[len(volParDate)-1]
+    volParDate.append(len(anoter)-tampon)
+    iteration = iteration + 1
+    printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
 
+final(anoter, volParDate, tableauDate)
+for out in range(len(sortie)):
+    writer.writerow(sortie[out])
+
+fichiercsv.close()
 time.sleep(5)
 browser.close()
