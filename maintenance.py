@@ -47,6 +47,10 @@ ancienneteFlotte = browser.find_element(by=By.ID, value='donutchart_div_aircraft
 
 if len(etatFlotte) > 30:
     print('Avion a réparer')
+else:
+    print("Pas d'avion à réparer")
     
 if len(ancienneteFlotte) > 20:
     print("Check D")
+else:
+    print("Pas de check D à faire")
