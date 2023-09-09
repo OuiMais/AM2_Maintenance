@@ -39,7 +39,7 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
 
 # Option for website (no screen open)
 options = Options()
-# options.add_argument('--headless')
+options.add_argument('--headless')
 
 # Initiate the browser
 browser = webdriver.Chrome(options=options)
@@ -133,6 +133,8 @@ for tour in range(last):
         printProgressBar(iteration, len(liens_extraits), prefix=prefixTour, suffix="Complete", length=50)
 
     if tour != last - 1:
-        browser.find_element(By.CLASS_NAME, "next").click()
+        nextPage = browser.find_element(By.CLASS_NAME, "next")
+        linkForNextPage = nextPage.find_element(By.TAG_NAME, "a").get_attribute("href")
+        browser.get(linkForNextPage)
 
 browser.close()

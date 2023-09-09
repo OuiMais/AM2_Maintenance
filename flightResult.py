@@ -42,7 +42,7 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
 
 def final(anoter, volParDate, tableauDate):
     tampon = 0
-    for journee in range(13):
+    for journee in range(len(volParDate) - 1):
         date = tableauDate[journee]
         tampon = tampon + volParDate[journee]
         for rangement in range(volParDate[journee + 1]):
@@ -81,7 +81,7 @@ def final(anoter, volParDate, tableauDate):
                 if money[dollar[0] + reachFinal + 1] != " ":
                     res = res+money[dollar[0] + reachFinal + 1]
 
-            sortie.append(date+''+avion+''+ligne+''+heure+''+pax+''+CA+''+res+'')
+            sortie.append(date+';'+avion+';'+ligne+';'+heure+';'+pax+';'+CA+';'+res+';')
             
     return sortie
 
@@ -119,7 +119,7 @@ tampon = 0
 fichiercsv = open('flightResult.csv', 'w', newline='')
 
 writer = csv.writer(fichiercsv)
-data = ['Jour Avion Ligne Depart/Arrivee Pax CA Resultats']
+data = ['Jour; Avion; Ligne; Depart/Arrivee; Pax; CA; Resultats;']
 writer.writerow(data)
 demand = ''
 iteration = 0
@@ -142,38 +142,39 @@ for jour in range(6, 0, -1):
     tableauDate.append(date)
 
     demand = demand+browser.find_element(by=By.ID, value='showHubFlights').text
-    boucle = int(demand[len(demand)-6]) - 1
+    if demand[len(demand)-6] != " ":
+        boucle = int(demand[len(demand)-6]) - 1
 
-    for echo in range(boucle):
-        site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date + '&page=' + str(echo+2)
-        browser.get(site)
-        time.sleep(2)
-        demand = demand + browser.find_element(by=By.ID, value='showHubFlights').text
+        for echo in range(boucle):
+            site = 'https://www.airlines-manager.com/network/showhub/6836614/flights?date=' + date + '&page=' + str(echo+2)
+            browser.get(site)
+            time.sleep(2)
+            demand = demand + browser.find_element(by=By.ID, value='showHubFlights').text
 
-    result = [_.start() for _ in re.finditer('OMG-', demand)]
-    resultTot = [_.start() for _ in re.finditer('Total', demand)]
-    for retour in range(len(resultTot)-1):
-        result.append(resultTot[retour])
-    result.sort()
+        result = [_.start() for _ in re.finditer('OMG-', demand)]
+        resultTot = [_.start() for _ in re.finditer('Total', demand)]
+        for retour in range(len(resultTot)-1):
+            result.append(resultTot[retour])
+        result.sort()
 
-    anoter = []
-    for t in range(len(result)-1):
-        tps = result[t+1] - result[t]
-        st = " "
+        anoter = []
+        for t in range(len(result)-1):
+            tps = result[t+1] - result[t]
+            st = " "
+            for tn in range(tps):
+                st = st + demand[result[t]+tn]
+            if len(st) < 100:
+                anoter.append(st)
+
+        tps = resultTot[len(resultTot)-1] - result[len(result)-1]
+        st = ' '
+
         for tn in range(tps):
-            st = st + demand[result[t]+tn]
+            st = st + demand[result[len(result)-1]+tn]
         if len(st) < 100:
             anoter.append(st)
-
-    tps = resultTot[len(resultTot)-1] - result[len(result)-1]
-    st = ' '
-
-    for tn in range(tps):
-        st = st + demand[result[len(result)-1]+tn]
-    if len(st) < 100:
-        anoter.append(st)
-    tampon = tampon + volParDate[len(volParDate)-1]
-    volParDate.append(len(anoter)-tampon)
+        tampon = tampon + volParDate[len(volParDate)-1]
+        volParDate.append(len(anoter)-tampon)
     iteration = iteration + 1
     printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
 
@@ -278,9 +279,11 @@ for jour in range(1, 7, +1):
     iteration = iteration + 1
     printProgressBar(iteration, 14, prefix='Progress:', suffix='Complete', length=50)
 
-final(anoter, volParDate, tableauDate)
+sortie = final(anoter, volParDate, tableauDate)
 for out in range(len(sortie)):
     writer.writerow(sortie[out])
+
+printProgressBar(iteration + 1, 14, prefix='Progress:', suffix='Complete', length=50)
 
 fichiercsv.close()
 time.sleep(5)
