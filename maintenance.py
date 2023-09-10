@@ -54,3 +54,5 @@ if len(ancienneteFlotte) > 20:
     print("Check D")
 else:
     print("Pas de check D à faire")
+
+browser.close()
