@@ -133,8 +133,10 @@ for tour in range(last):
         printProgressBar(iteration, len(liens_extraits), prefix=prefixTour, suffix="Complete", length=50)
 
     if tour != last - 1:
-        nextPage = browser.find_element(By.CLASS_NAME, "next")
+        footer = browser.find_element(By.CLASS_NAME, "pagination")
+        nextPage = footer.find_element(By.CLASS_NAME, "next")
         linkForNextPage = nextPage.find_element(By.TAG_NAME, "a").get_attribute("href")
         browser.get(linkForNextPage)
+        time.sleep(5)
 
 browser.close()

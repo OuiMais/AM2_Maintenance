@@ -73,10 +73,10 @@ linked = [elmt.get_attribute("href") for elmt in links]
 
 for link in linked:
     browser.get(link)
-    time.sleep(2)
-    browser.find_element(by=By.CLASS_NAME, value='validBtn').click()
-    time.sleep(2)
+    time.sleep(5)
+    browser.find_element(by=By.ID, value='resetPlanning').click()
+    time.sleep(5)
     browser.find_element(by=By.CLASS_NAME, value='planningBtnCenter').click()
-    time.sleep(2)
+    time.sleep(5)
 
 browser.close()
