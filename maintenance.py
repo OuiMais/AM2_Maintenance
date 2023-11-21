@@ -15,17 +15,18 @@ import time
 
 # Option for website (no screen open)
 options = Options()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 
 # Initiate the browser
 browser = webdriver.Chrome(options=options)
 
 # Open the Website
-browser.get('https://www.airlines-manager.com/maintenance/book')
+browser.get('https://www.airlines-manager.com/maintenance/group')
 
 # Your  credentials
 name = 'flohofbauer@icloud.com'
 mdp = 'Flo17Titi!'
+levelBeforeIncident = 14
 
 # Fill credentials
 browser.find_element(by=By.NAME, value='_username').send_keys(name)
@@ -39,18 +40,37 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
-etatFlotte = browser.find_element(by=By.ID, value='donutchart_div_aircraftNumberByWear_legend').text
+browser.find_element(By.ID, 'silverArrowLeftMark').click()
+time.sleep(5)
 
-ancienneteFlotte = browser.find_element(by=By.ID, value='donutchart_div_aircraftNumberByMark_legend').text
+checkDLC = int(browser.find_element(By.ID, 'longHaulAircraftsCount').text)
+checkDMC = int(browser.find_element(By.ID, 'mediumHaulAircraftsCount').text)
+checkDCC = int(browser.find_element(By.ID, 'shortHaulAircraftsCount').text)
 
-if len(etatFlotte) > 30:
-    print('Avion a réparer')
-else:
-    print("Pas d'avion à réparer")
-    
-if len(ancienneteFlotte) > 20:
-    print("Check D")
-else:
-    print("Pas de check D à faire")
+checkD = checkDCC + checkDMC + checkDLC
+
+browser.find_element(By.ID, 'silverArrowRightMark').click()
+
+for checkA in range(levelBeforeIncident):
+    browser.find_element(By.ID, 'silverArrowLeftWear').click()
+time.sleep(5)
+
+checkALC = int(browser.find_element(By.ID, 'longHaulAircraftsCount').text)
+checkAMC = int(browser.find_element(By.ID, 'mediumHaulAircraftsCount').text)
+checkACC = int(browser.find_element(By.ID, 'shortHaulAircraftsCount').text)
+
+checkA = checkACC + checkAMC + checkALC
+
+if checkA != 0:
+    if checkD != 0:
+        browser.find_element(By.ID, 'submitCheckD').click()
+        time.sleep(5)
+        browser.find_element(By.LINK_TEXT, 'Valider').click()
+    else:
+        browser.find_element(By.ID, 'submitCheckA').click()
+        time.sleep(5)
+        browser.find_element(By.LINK_TEXT, 'Valider').click()
+
+time.sleep(5)
 
 browser.close()
