@@ -40,6 +40,19 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
+endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
+terminer_links = endOfElement.find_elements(By.CSS_SELECTOR, 'a.useAjax')
+
+for link in terminer_links:
+    if link.text == "Terminer":
+        link.click()
+        time.sleep(5)
+        browser.find_element(By.XPATH, '//div[@class="popupBottom"]//span[@class="purchaseButton"]').click()
+        time.sleep(5)
+
+browser.get('https://www.airlines-manager.com/maintenance/group')
+time.sleep(5)
+
 browser.find_element(By.ID, 'silverArrowLeftMark').click()
 time.sleep(5)
 
