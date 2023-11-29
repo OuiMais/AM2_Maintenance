@@ -13,6 +13,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
 
 import time
 
@@ -25,6 +26,7 @@ browser = webdriver.Chrome(options=options)
 
 # Open the Website
 browser.get('https://www.airlines-manager.com/home/wheeltcgame')
+# browser.get('https://www.airlines-manager.com/shop/cardholder')
 
 # Your  credentials
 name = 'flohofbauer@icloud.com'
@@ -40,29 +42,29 @@ time.sleep(5)
 
 #Click accept cookies
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
-time.sleep(5)
+time.sleep(2)
 
-# browser.find_element(By.CLASS_NAME, 'validBtnBlue').click()
+# browser.find_element(By.ID, 'play').click()
 # time.sleep(5)
 #
-# gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.ID, "Je récupère mon gain")))
+# gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.CLASS_NAME, "purchaseButton validateWinPopup")))
 #
 # # Effectuez des actions sur mon_element
 # gainWheel.click()
-
-# time.sleep(5)
 #
+# time.sleep(5)
+
 # browser.get('https://www.airlines-manager.com/shop/workshop')
 # time.sleep(5)
 #
-# browser.find_element(By.LINK_TEXT, 'Gratuit').click()
+# browser.find_element(By.CLASS_NAME, 'purchaseButton useAjax').click()
 # time.sleep(5)
 #
 # yesButton = WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
 # yesButton.click()
 # time.sleep(5)
-#
-# # Ajouter la détecteion des avions pour les envoyer au garage
+
+# Ajouter la détecteion des avions pour les envoyer au garage
 
 browser.get('https://www.airlines-manager.com/shop/cardholder')
 
@@ -71,18 +73,20 @@ freeCard = browser.find_element(By.XPATH, "//button[@class='cardholder-cardinfo-
 
 if freeCard != '':
     freeCard.click()
-    time.sleep(5)
-    browser.find_element(By.XPATH, "//a[@class='purchaseButton useAjax' and 'Gratuit']").click()
+    time.sleep(2)
+    gratuit_button = browser.find_element(By.XPATH,
+                                         "//div[@class='buyCardHolder-containCard-buy']//a[contains(text(), 'Gratuit')]")
+    ActionChains(browser).move_to_element(gratuit_button).click().perform()
     time.sleep(5)
     yesButton = WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
     yesButton.click()
     time.sleep(5)
 
-    cards = browser.find_elements(By.ID, 'placeholderCards')
+    cards = browser.find_elements(By.CLASS_NAME, 'placeholderCards') # 17102000
     cardsNumber = len(cards)
 
     for i in range(cardsNumber):
-        browser.find_element(By.CLASS_NAME, 'showCards-crad back-card').click()
+        browser.find_element(By.CLASS_NAME, 'showCards-card back-card').click()
         time.sleep(5)
 
     browser.find_element(By.XPATH, "//button[@class='validBtnBlue closeGift' and 'Continuer']").click()

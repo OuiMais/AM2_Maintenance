@@ -47,7 +47,7 @@ for link in terminer_links:
     if link.text == "Terminer":
         link.click()
         time.sleep(5)
-        browser.find_element(By.XPATH, '//div[@class="popupBottom"]//span[@class="purchaseButton"]').click()
+        browser.get('https://www.airlines-manager.com/maintenance/group')
         time.sleep(5)
 
 browser.get('https://www.airlines-manager.com/maintenance/group')
