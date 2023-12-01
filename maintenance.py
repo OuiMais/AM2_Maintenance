@@ -11,6 +11,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 import time
 
 # Option for website (no screen open)
@@ -40,15 +41,31 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
-endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
-terminer_links = endOfElement.find_elements(By.CSS_SELECTOR, 'a.useAjax')
+try:
+    # Essayez de trouver l'élément
+    endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
+except NoSuchElementException:
+    # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
+    endOfElement = ''
+    time.sleep(1)
 
-for link in terminer_links:
-    if link.text == "Terminer":
-        link.click()
-        time.sleep(5)
-        browser.get('https://www.airlines-manager.com/maintenance/group')
-        time.sleep(5)
+if endOfElement != '':
+    terminer_links = endOfElement.find_elements(By.CSS_SELECTOR, 'a.useAjax')
+
+    for i in range(len(terminer_links)):
+        try:
+            # Essayez de trouver l'élément
+            link = endOfElement.find_element(By.CSS_SELECTOR, 'a.useAjax')
+            if link.text == "Terminer":
+                link.click()
+                time.sleep(5)
+                browser.get('https://www.airlines-manager.com/maintenance/group')
+                time.sleep(5)
+
+        except NoSuchElementException:
+            # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
+            link = ''
+            time.sleep(1)
 
 browser.get('https://www.airlines-manager.com/maintenance/group')
 time.sleep(5)

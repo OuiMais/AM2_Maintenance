@@ -11,6 +11,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
@@ -42,34 +43,37 @@ time.sleep(5)
 
 #Click accept cookies
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
-time.sleep(2)
+time.sleep(5)
 
-# browser.find_element(By.ID, 'play').click()
-# time.sleep(5)
-#
-# gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.CLASS_NAME, "purchaseButton validateWinPopup")))
-#
-# # Effectuez des actions sur mon_element
-# gainWheel.click()
-#
-# time.sleep(5)
+browser.find_element(By.ID, 'play').click()
+time.sleep(5)
 
-# browser.get('https://www.airlines-manager.com/shop/workshop')
-# time.sleep(5)
-#
-# browser.find_element(By.CLASS_NAME, 'purchaseButton useAjax').click()
-# time.sleep(5)
-#
-# yesButton = WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
-# yesButton.click()
-# time.sleep(5)
+gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.CLASS_NAME, "purchaseButton validateWinPopup")))
+
+# Effectuez des actions sur mon_element
+gainWheel.click()
+
+time.sleep(5)
+
+browser.get('https://www.airlines-manager.com/shop/workshop')
+time.sleep(5)
+
+browser.find_element(By.XPATH, "//a[@class='purchaseButton useAjax']//div[contains(text(), 'Gratuit')]").click()
+time.sleep(5)
+
+yesButton = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
+yesButton.click()
+time.sleep(5)
 
 # Ajouter la détecteion des avions pour les envoyer au garage
 
 browser.get('https://www.airlines-manager.com/shop/cardholder')
 
-freeCard = ''
-freeCard = browser.find_element(By.XPATH, "//button[@class='cardholder-cardinfo-button validBtnBlue' and 'Gratuit']")
+try:
+    freeCard = browser.find_element(By.XPATH, "//button[@class='cardholder-cardinfo-button validBtnBlue' and 'Gratuit']")
+except NoSuchElementException:
+    freeCard = ''
+    time.sleep(1)
 
 if freeCard != '':
     freeCard.click()
@@ -86,7 +90,7 @@ if freeCard != '':
     cardsNumber = len(cards)
 
     for i in range(cardsNumber):
-        browser.find_element(By.CLASS_NAME, 'showCards-card back-card').click()
+        browser.find_element(By.XPATH, "//div[@class='showCards-card back-card']").click()
         time.sleep(5)
 
     browser.find_element(By.XPATH, "//button[@class='validBtnBlue closeGift' and 'Continuer']").click()
