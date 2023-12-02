@@ -45,17 +45,17 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
-# browser.find_element(By.ID, 'play').click()
-# time.sleep(5)
-#
-# gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.XPATH,
-#                                                                                "//span[@class='purchaseButton
-#                                                                                validateWinPopup']")))
-#
-# # Effectuez des actions sur mon_element
-# gainWheel.click()
-#
-# time.sleep(5)
+browser.find_element(By.ID, 'play').click()
+time.sleep(5)
+
+gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.XPATH,
+                                                                               "//span[@class='purchaseButton
+                                                                               validateWinPopup']")))
+
+# Effectuez des actions sur mon_element
+gainWheel.click()
+
+time.sleep(5)
 
 browser.get('https://www.airlines-manager.com/shop/workshop')
 time.sleep(5)
