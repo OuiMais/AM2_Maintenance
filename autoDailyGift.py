@@ -45,15 +45,17 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
-browser.find_element(By.ID, 'play').click()
-time.sleep(5)
-
-gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.CLASS_NAME, "purchaseButton validateWinPopup")))
-
-# Effectuez des actions sur mon_element
-gainWheel.click()
-
-time.sleep(5)
+# browser.find_element(By.ID, 'play').click()
+# time.sleep(5)
+#
+# gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.XPATH,
+#                                                                                "//span[@class='purchaseButton
+#                                                                                validateWinPopup']")))
+#
+# # Effectuez des actions sur mon_element
+# gainWheel.click()
+#
+# time.sleep(5)
 
 browser.get('https://www.airlines-manager.com/shop/workshop')
 time.sleep(5)
@@ -78,22 +80,26 @@ except NoSuchElementException:
 if freeCard != '':
     freeCard.click()
     time.sleep(2)
-    gratuit_button = browser.find_element(By.XPATH,
-                                         "//div[@class='buyCardHolder-containCard-buy']//a[contains(text(), 'Gratuit')]")
-    ActionChains(browser).move_to_element(gratuit_button).click().perform()
-    time.sleep(5)
-    yesButton = WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
-    yesButton.click()
-    time.sleep(5)
+    try:
+        gratuit_button = browser.find_element(By.XPATH, "//div[@class='buyCardHolder-containCard-buy']//a[contains(text(), 'Gratuit')]")
+    except NoSuchElementException:
+        gratuit_button = ''
 
-    cards = browser.find_elements(By.CLASS_NAME, 'placeholderCards') # 17102000
-    cardsNumber = len(cards)
-
-    for i in range(cardsNumber):
-        browser.find_element(By.XPATH, "//div[@class='showCards-card back-card']").click()
+    if gratuit_button != '':
+        ActionChains(browser).move_to_element(gratuit_button).click().perform()
+        time.sleep(5)
+        yesButton = WebDriverWait(browser, 20).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
+        yesButton.click()
         time.sleep(5)
 
-    browser.find_element(By.XPATH, "//button[@class='validBtnBlue closeGift' and 'Continuer']").click()
-    time.sleep(5)
+        cards = browser.find_elements(By.CLASS_NAME, 'placeholderCards') # 17102000
+        cardsNumber = len(cards)
+
+        for i in range(cardsNumber):
+            browser.find_element(By.XPATH, "//div[@class='showCards-card back-card']").click()
+            time.sleep(5)
+
+        browser.find_element(By.XPATH, "//button[@class='validBtnBlue closeGift' and 'Continuer']").click()
+        time.sleep(5)
 
 browser.close()

@@ -56,16 +56,17 @@ if endOfElement != '':
         try:
             # Essayez de trouver l'élément
             link = endOfElement.find_element(By.CSS_SELECTOR, 'a.useAjax')
+        except NoSuchElementException:
+            # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
+            link = ''
+            time.sleep(1)
+
+        if link != '':
             if link.text == "Terminer":
                 link.click()
                 time.sleep(5)
                 browser.get('https://www.airlines-manager.com/maintenance/group')
                 time.sleep(5)
-
-        except NoSuchElementException:
-            # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
-            link = ''
-            time.sleep(1)
 
 browser.get('https://www.airlines-manager.com/maintenance/group')
 time.sleep(5)
