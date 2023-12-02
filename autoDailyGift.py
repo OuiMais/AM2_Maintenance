@@ -49,8 +49,8 @@ browser.find_element(By.ID, 'play').click()
 time.sleep(5)
 
 gainWheel = WebDriverWait(browser, 30).until(EC.visibility_of_element_located((By.XPATH,
-                                                                               "//span[@class='purchaseButton
-                                                                               validateWinPopup']")))
+                                                                               "//span[@class='purchaseButton "
+                                                                               "validateWinPopup']")))
 
 # Effectuez des actions sur mon_element
 gainWheel.click()
