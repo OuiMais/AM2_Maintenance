@@ -55,6 +55,7 @@ if endOfElement != '':
     for i in range(len(terminer_links)):
         try:
             # Essayez de trouver l'élément
+            endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
             link = endOfElement.find_element(By.CSS_SELECTOR, 'a.useAjax')
         except NoSuchElementException:
             # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)

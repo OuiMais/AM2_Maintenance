@@ -11,6 +11,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 import time
 
 
@@ -39,7 +40,7 @@ def printProgressBar(iteration, total, prefix='', suffix='', decimals=1, length=
 
 # Option for website (no screen open)
 options = Options()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 
 # Initiate the browser
 browser = webdriver.Chrome(options=options)
@@ -63,9 +64,12 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
-howFindLast = browser.find_element(By.CLASS_NAME, "last").find_element(By.TAG_NAME, "a").get_attribute("href")
-tamponLast = howFindLast.split("=")
-last = int(tamponLast[-1])
+try:
+    howFindLast = browser.find_element(By.CLASS_NAME, "last").find_element(By.TAG_NAME, "a").get_attribute("href")
+    tamponLast = howFindLast.split("=")
+    last = int(tamponLast[-1])
+except NoSuchElementException:
+    last = 1
 
 for tour in range(last):
 
@@ -79,7 +83,7 @@ for tour in range(last):
     # Extraire les liens qui commencent par la donnée précise
     liens_extraits = [lien for lien in links if lien is not None and lien.startswith(debut_donnee)]
 
-    nbLink = len(liens_extraits) - 3
+    nbLink = len(liens_extraits) - 4
 
     liens_extraits = liens_extraits[5:nbLink]
     prefixTour = "Process tour n° " + str(tour + 1)
