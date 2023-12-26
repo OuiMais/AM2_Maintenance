@@ -17,7 +17,7 @@ from pushbullet import Pushbullet
 
 # Option for website (no screen open)
 options = Options()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 
 # Initiate the browser
 browser = webdriver.Chrome(options=options)
@@ -106,7 +106,7 @@ if checkA != 0:
         time.sleep(2)
 
         # Envoie d'une notification
-        notif = "Maintenance: check D de " + str(checkD) + " avion(s)!"
+        notif = "Maintenance: check D de " + str(checkA) + " avion(s)!"
         push = pb.push_note('AM2 Bot', notif)
     else:
         browser.find_element(By.ID, 'submitCheckA').click()

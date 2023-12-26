@@ -110,7 +110,7 @@ if checkA != 0:
         time.sleep(2)
 
         # Envoie d'une notification
-        notif = "Maintenance: check D de " + str(checkD) + " avion(s)!"
+        notif = "Maintenance: check D de " + str(checkA) + " avion(s)!"
         push = pb.push_note('AM2 Bot', notif)
     else:
         browser.find_element(By.ID, 'submitCheckA').click()
