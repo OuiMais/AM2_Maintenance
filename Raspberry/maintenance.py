@@ -14,6 +14,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import time
+from pushbullet import Pushbullet
 
 # Option for website (no screen open)
 options = Options()
@@ -32,6 +33,10 @@ browser.get('https://www.airlines-manager.com/maintenance/group')
 name = 'flohofbauer@icloud.com'
 mdp = 'Flo17Titi!'
 levelBeforeIncident = 14
+
+# API for notification
+api_key = 'o.6RxYZlji3PYG1hlGhezV6pOGoH4VPucu'
+pb = Pushbullet(api_key)
 
 # Fill credentials
 browser.find_element(by=By.NAME, value='_username').send_keys(name)
@@ -102,11 +107,25 @@ if checkA != 0:
         browser.find_element(By.ID, 'submitCheckD').click()
         time.sleep(5)
         browser.find_element(By.LINK_TEXT, 'Valider').click()
+        time.sleep(2)
+
+        # Envoie d'une notification
+        notif = "Maintenance: check D de " + str(checkD) + "avion(s)!"
+        push = pb.push_note('AM2 Bot', notif)
     else:
         browser.find_element(By.ID, 'submitCheckA').click()
         time.sleep(5)
         browser.find_element(By.LINK_TEXT, 'Valider').click()
+        time.sleep(2)
 
-time.sleep(5)
+        # Envoie d'une notification
+        notif = "Maintenance: check A de " + str(checkA) + "avion(s)!"
+        push = pb.push_note('AM2 Bot', notif)
+else:
+    # Envoie d'une notification
+    notif = "Pas de maintenance à effectuer."
+    push = pb.push_note('AM2 Bot', notif)
+
+time.sleep(2)
 
 browser.close()
