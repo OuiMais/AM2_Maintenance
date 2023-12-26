@@ -10,6 +10,7 @@
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 import time
@@ -17,9 +18,12 @@ import time
 # Option for website (no screen open)
 options = Options()
 options.add_argument('--headless')
+options.add_argument("-disable-gpu")
 
+path = '/usr/bin/chromedriver'
+service = Service(executable_path=path)
 # Initiate the browser
-browser = webdriver.Chrome(options=options)
+browser = webdriver.Chrome(service=service, options=options)
 
 # Open the Website
 browser.get('https://www.airlines-manager.com/maintenance/group')
