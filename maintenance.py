@@ -28,7 +28,7 @@ browser.get('https://www.airlines-manager.com/maintenance/group')
 # Your  credentials
 name = 'flohofbauer@icloud.com'
 mdp = 'Flo17Titi!'
-levelBeforeIncident = 14
+levelBeforeIncident = 13
 
 # API for notification
 api_key = 'o.6RxYZlji3PYG1hlGhezV6pOGoH4VPucu'
