@@ -108,6 +108,7 @@ except NoSuchElementException:
 
 if endOfElement != '':
     terminer_links = endOfElement.find_elements(By.CSS_SELECTOR, 'a.useAjax')
+    finish = 0
 
     for i in range(len(terminer_links)):
         try:
@@ -125,6 +126,14 @@ if endOfElement != '':
                 time.sleep(5)
                 browser.get('https://www.airlines-manager.com/maintenance/group')
                 time.sleep(5)
+                finish += 1
+
+    notif = str(finish) + " maintenance(s) terminée(s)."
+    push = pb.push_note('AM2 Bot', notif)
+else:
+    # Envoie d'une notification
+    notif = "Pas de maintenance à terminer."
+    push = pb.push_note('AM2 Bot', notif)
 
 browser.get('https://www.airlines-manager.com/maintenance/group')
 time.sleep(2)
