@@ -1,7 +1,7 @@
 """
     Projet : AM2_Auto / autoDailyGift
     Date Creation : 22/11/2023
-    Date Revision : 22/11/2023
+    Date Revision : 29/12/2023
     Entreprise : 3SC4P3
     Auteur: Florian HOFBAUER
     Contact :
