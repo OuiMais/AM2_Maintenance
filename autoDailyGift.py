@@ -15,8 +15,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-
 import time
+from pushbullet import Pushbullet
 
 # Option for website (no screen open)
 options = Options()
@@ -31,6 +31,10 @@ browser.get('https://www.airlines-manager.com/home/wheeltcgame')
 # Your  credentials
 name = 'flohofbauer@icloud.com'
 mdp = 'Flo17Titi!'
+
+# API for notification
+api_key = 'o.6RxYZlji3PYG1hlGhezV6pOGoH4VPucu'
+pb = Pushbullet(api_key)
 
 # Fill credentials
 browser.find_element(by=By.NAME, value='_username').send_keys(name)

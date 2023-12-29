@@ -91,44 +91,44 @@ else:
     notif = "Pas de maintenance à effectuer."
     push = pb.push_note('AM2 Bot', notif)
 
-browser.get('https://www.airlines-manager.com/maintenance/group')
-
-try:
-    # Essayez de trouver l'élément
-    endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
-except NoSuchElementException:
-    # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
-    endOfElement = ''
-    time.sleep(1)
-
-if endOfElement != '':
-    terminer_links = endOfElement.find_elements(By.CSS_SELECTOR, 'a.useAjax')
-    finish = 0
-
-    for i in range(len(terminer_links)):
-        try:
-            # Essayez de trouver l'élément
-            endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
-            link = endOfElement.find_element(By.CSS_SELECTOR, 'a.useAjax')
-        except NoSuchElementException:
-            # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
-            link = ''
-            time.sleep(1)
-
-        if link != '':
-            if link.text == "Terminer":
-                link.click()
-                time.sleep(5)
-                browser.get('https://www.airlines-manager.com/maintenance/group')
-                time.sleep(5)
-                finish += 1
-
-    notif = str(finish) + " maintenance(s) terminée(s)."
-    push = pb.push_note('AM2 Bot', notif)
-else:
-    # Envoie d'une notification
-    notif = "Pas de maintenance à terminer."
-    push = pb.push_note('AM2 Bot', notif)
+# browser.get('https://www.airlines-manager.com/maintenance/group')
+#
+# try:
+#     # Essayez de trouver l'élément
+#     endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
+# except NoSuchElementException:
+#     # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
+#     endOfElement = ''
+#     time.sleep(1)
+#
+# if endOfElement != '':
+#     terminer_links = endOfElement.find_elements(By.CSS_SELECTOR, 'a.useAjax')
+#     finish = 0
+#
+#     for i in range(len(terminer_links)):
+#         try:
+#             # Essayez de trouver l'élément
+#             endOfElement = browser.find_element(By.ID, 'rightInfoBoxContent')
+#             link = endOfElement.find_element(By.CSS_SELECTOR, 'a.useAjax')
+#         except NoSuchElementException:
+#             # Si l'élément n'est pas trouvé, attribuez une valeur spécifique (par exemple, une chaîne vide)
+#             link = ''
+#             time.sleep(1)
+#
+#         if link != '':
+#             if link.text == "Terminer":
+#                 link.click()
+#                 time.sleep(5)
+#                 browser.get('https://www.airlines-manager.com/maintenance/group')
+#                 time.sleep(5)
+#                 finish += 1
+#
+#     notif = str(finish) + " maintenance(s) terminée(s)."
+#     push = pb.push_note('AM2 Bot', notif)
+# else:
+#     # Envoie d'une notification
+#     notif = "Pas de maintenance à terminer."
+#     push = pb.push_note('AM2 Bot', notif)
 
 browser.get('https://www.airlines-manager.com/maintenance/group')
 time.sleep(2)
