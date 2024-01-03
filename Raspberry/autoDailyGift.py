@@ -109,37 +109,31 @@ while freeWorkshop != '':
 
 # Ajouter la détecteion des avions pour les envoyer au garage
 browser.get('https://www.airlines-manager.com/shop/cardholder')
+time.sleep(5)
 
-cardSeconds = ''
-cardMinutes = ''
-cardHours = ''
+cardCountDown = ''
+hours = ''
+minutes = ''
+secondes = ''
 waitingTime = 0
 hoursInt = 0
 minutesInt = 0
 secondesInt = 0
 
 try:
-    cardSeconds = browser.find_element(By.CLASS_NAME, "amCountDown_seconds")
+    cardCountDown = browser.find_element(By.CLASS_NAME, "freeCardCountDown")
 except NoSuchElementException:
     time.sleep(1)
 
-if cardSeconds != '':
-    secondes = cardSeconds.text
-    secondes = secondes[:-1]
+if cardCountDown != '':
+    countDown = cardCountDown.text
+    hours = countDown[0:2]
+    minutes = countDown[3:5]
+    secondes = countDown[6:8]
+
     secondesInt = int(secondes)
-
-    cardMinutes = browser.find_element(By.CLASS_NAME, "amCountDown_minutes")
-    cardHours = browser.find_element(By.CLASS_NAME, "amCountDown_hours")
-
-    if cardMinutes != '':
-        minutes = cardMinutes.text
-        minutes = minutes[:-1]
-        minutesInt = int(minutes)
-
-    if cardHours != '':
-        hours = cardHours.text
-        hours = hours[:-1]
-        hoursInt = int(hours)
+    minutesInt = int(minutes)
+    hoursInt = int(hours)
 
     waitingTime = secondesInt + (minutesInt + hoursInt * 60) * 60
 
@@ -187,11 +181,11 @@ if freeCard != '':
         push = pb.push_note('AM2 Bot', notif)
     else:
         # Envoie d'une notification
-        notif = "Carte gratuite disponible dans " + str(hoursInt) + ":" + str(minutesInt) + ":" + str(secondesInt) + "."
+        notif = "Carte gratuite disponible dans " + hours + ":" + minutes + ":" + secondes + "."
         push = pb.push_note('AM2 Bot', notif)
 else:
     # Envoie d'une notification
-    notif = "Carte gratuite disponible dans " + str(hoursInt) + ":" + str(minutesInt) + ":" + str(secondesInt) + "."
+    notif = "Carte gratuite disponible dans " + hours + ":" + minutes + ":" + secondes + "."
     push = pb.push_note('AM2 Bot', notif)
 
 browser.close()

@@ -48,94 +48,88 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
-try:
-    wheel = browser.find_element(By.ID, 'play')
-except NoSuchElementException:
-    wheel = ''
-    time.sleep(1)
-
-if wheel != '':
-    wheel.click()
-    time.sleep(5)
-
-    gainWheel = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.XPATH,
-                                                                                   "//span[@class='purchaseButton "
-                                                                                   "validateWinPopup']")))
-
-    # Effectuez des actions sur mon_element
-    gainWheel.click()
-    time.sleep(5)
-
-    # Envoie d'une notification
-    notif = "Wheel gratuit obtenue."
-    push = pb.push_note('AM2 Bot', notif)
-else:
-    # Envoie d'une notification
-    notif = "Wheel indisponible."
-    push = pb.push_note('AM2 Bot', notif)
-
-browser.get('https://www.airlines-manager.com/shop/workshop')
-time.sleep(5)
-
-freeWorkshop = 'e'
-
-while freeWorkshop != '':
-    try:
-        freeWorkshop = browser.find_element(By.XPATH,
-                                            "//a[@class='purchaseButton useAjax']//div[contains(text(), 'Gratuit')]")
-    except NoSuchElementException:
-        freeWorkshop = ''
-        time.sleep(1)
-
-    if freeWorkshop != '':
-        freeWorkshop.click()
-        time.sleep(5)
-
-        yesButton = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
-        yesButton.click()
-        time.sleep(5)
-
-        # Envoie d'une notification
-        notif = "Workshop gratuit obtenu."
-        push = pb.push_note('AM2 Bot', notif)
-    else:
-        # Envoie d'une notification
-        notif = "Workshop gratuit indisponible."
-        push = pb.push_note('AM2 Bot', notif)
+# try:
+#     wheel = browser.find_element(By.ID, 'play')
+# except NoSuchElementException:
+#     wheel = ''
+#     time.sleep(1)
+#
+# if wheel != '':
+#     wheel.click()
+#     time.sleep(5)
+#
+#     gainWheel = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.XPATH,
+#                                                                                    "//span[@class='purchaseButton "
+#                                                                                    "validateWinPopup']")))
+#
+#     # Effectuez des actions sur mon_element
+#     gainWheel.click()
+#     time.sleep(5)
+#
+#     # Envoie d'une notification
+#     notif = "Wheel gratuit obtenue."
+#     push = pb.push_note('AM2 Bot', notif)
+# else:
+#     # Envoie d'une notification
+#     notif = "Wheel indisponible."
+#     push = pb.push_note('AM2 Bot', notif)
+#
+# browser.get('https://www.airlines-manager.com/shop/workshop')
+# time.sleep(5)
+#
+# freeWorkshop = 'e'
+#
+# while freeWorkshop != '':
+#     try:
+#         freeWorkshop = browser.find_element(By.XPATH,
+#                                             "//a[@class='purchaseButton useAjax']//div[contains(text(), 'Gratuit')]")
+#     except NoSuchElementException:
+#         freeWorkshop = ''
+#         time.sleep(1)
+#
+#     if freeWorkshop != '':
+#         freeWorkshop.click()
+#         time.sleep(5)
+#
+#         yesButton = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
+#         yesButton.click()
+#         time.sleep(5)
+#
+#         # Envoie d'une notification
+#         notif = "Workshop gratuit obtenu."
+#         push = pb.push_note('AM2 Bot', notif)
+#     else:
+#         # Envoie d'une notification
+#         notif = "Workshop gratuit indisponible."
+#         push = pb.push_note('AM2 Bot', notif)
 
 # Ajouter la détecteion des avions pour les envoyer au garage
 browser.get('https://www.airlines-manager.com/shop/cardholder')
+time.sleep(5)
 
-cardSeconds = ''
-cardMinutes = ''
-cardHours = ''
+cardCountDown = ''
+hours = ''
+minutes = ''
+secondes = ''
 waitingTime = 0
 hoursInt = 0
 minutesInt = 0
 secondesInt = 0
 
 try:
-    cardSeconds = browser.find_element(By.CLASS_NAME, "amCountDown_seconds")
+    cardCountDown = browser.find_element(By.CLASS_NAME, "freeCardCountDown")
 except NoSuchElementException:
     time.sleep(1)
 
-if cardSeconds != '':
-    secondes = cardSeconds.text
-    secondes = secondes[:-1]
+if cardCountDown != '':
+    countDown = cardCountDown.text
+    hours = countDown[0:2]
+    minutes = countDown[3:5]
+    secondes = countDown[6:8]
+
     secondesInt = int(secondes)
-
-    cardMinutes = browser.find_element(By.CLASS_NAME, "amCountDown_minutes")
-    cardHours = browser.find_element(By.CLASS_NAME, "amCountDown_hours")
-
-    if cardMinutes != '':
-        minutes = cardMinutes.text
-        minutes = minutes[:-1]
-        minutesInt = int(minutes)
-
-    if cardHours != '':
-        hours = cardHours.text
-        hours = hours[:-1]
-        hoursInt = int(hours)
+    minutesInt = int(minutes)
+    hoursInt = int(hours)
 
     waitingTime = secondesInt + (minutesInt + hoursInt * 60) * 60
 
@@ -183,11 +177,11 @@ if freeCard != '':
         push = pb.push_note('AM2 Bot', notif)
     else:
         # Envoie d'une notification
-        notif = "Carte gratuite disponible dans " + str(hoursInt) + ":" + str(minutesInt) + ":" + str(secondesInt) + "."
+        notif = "Carte gratuite disponible dans " + hours + ":" + minutes + ":" + secondes + "."
         push = pb.push_note('AM2 Bot', notif)
 else:
     # Envoie d'une notification
-    notif = "Carte gratuite disponible dans " + str(hoursInt) + ":" + str(minutesInt) + ":" + str(secondesInt) + "."
+    notif = "Carte gratuite disponible dans " + hours + ":" + minutes + ":" + secondes + "."
     push = pb.push_note('AM2 Bot', notif)
 
 browser.close()
