@@ -48,60 +48,60 @@ time.sleep(5)
 browser.find_element(by=By.CLASS_NAME, value='cc-compliance').click()
 time.sleep(5)
 
-# try:
-#     wheel = browser.find_element(By.ID, 'play')
-# except NoSuchElementException:
-#     wheel = ''
-#     time.sleep(1)
-#
-# if wheel != '':
-#     wheel.click()
-#     time.sleep(5)
-#
-#     gainWheel = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.XPATH,
-#                                                                                    "//span[@class='purchaseButton "
-#                                                                                    "validateWinPopup']")))
-#
-#     # Effectuez des actions sur mon_element
-#     gainWheel.click()
-#     time.sleep(5)
-#
-#     # Envoie d'une notification
-#     notif = "Wheel gratuit obtenue."
-#     push = pb.push_note('AM2 Bot', notif)
-# else:
-#     # Envoie d'une notification
-#     notif = "Wheel indisponible."
-#     push = pb.push_note('AM2 Bot', notif)
-#
-# browser.get('https://www.airlines-manager.com/shop/workshop')
-# time.sleep(5)
-#
-# freeWorkshop = 'e'
-#
-# while freeWorkshop != '':
-#     try:
-#         freeWorkshop = browser.find_element(By.XPATH,
-#                                             "//a[@class='purchaseButton useAjax']//div[contains(text(), 'Gratuit')]")
-#     except NoSuchElementException:
-#         freeWorkshop = ''
-#         time.sleep(1)
-#
-#     if freeWorkshop != '':
-#         freeWorkshop.click()
-#         time.sleep(5)
-#
-#         yesButton = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
-#         yesButton.click()
-#         time.sleep(5)
-#
-#         # Envoie d'une notification
-#         notif = "Workshop gratuit obtenu."
-#         push = pb.push_note('AM2 Bot', notif)
-#     else:
-#         # Envoie d'une notification
-#         notif = "Workshop gratuit indisponible."
-#         push = pb.push_note('AM2 Bot', notif)
+try:
+    wheel = browser.find_element(By.ID, 'play')
+except NoSuchElementException:
+    wheel = ''
+    time.sleep(1)
+
+if wheel != '':
+    wheel.click()
+    time.sleep(5)
+
+    gainWheel = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.XPATH,
+                                                                                   "//span[@class='purchaseButton "
+                                                                                   "validateWinPopup']")))
+
+    # Effectuez des actions sur mon_element
+    gainWheel.click()
+    time.sleep(5)
+
+    # Envoie d'une notification
+    notif = "Wheel gratuit obtenue."
+    push = pb.push_note('AM2 Bot', notif)
+else:
+    # Envoie d'une notification
+    notif = "Wheel indisponible."
+    push = pb.push_note('AM2 Bot', notif)
+
+browser.get('https://www.airlines-manager.com/shop/workshop')
+time.sleep(5)
+
+freeWorkshop = 'e'
+
+while freeWorkshop != '':
+    try:
+        freeWorkshop = browser.find_element(By.XPATH,
+                                            "//a[@class='purchaseButton useAjax']//div[contains(text(), 'Gratuit')]")
+    except NoSuchElementException:
+        freeWorkshop = ''
+        time.sleep(1)
+
+    if freeWorkshop != '':
+        freeWorkshop.click()
+        time.sleep(5)
+
+        yesButton = WebDriverWait(browser, 60).until(EC.visibility_of_element_located((By.ID, "form_purchase")))
+        yesButton.click()
+        time.sleep(5)
+
+        # Envoie d'une notification
+        notif = "Workshop gratuit obtenu."
+        push = pb.push_note('AM2 Bot', notif)
+    else:
+        # Envoie d'une notification
+        notif = "Workshop gratuit indisponible."
+        push = pb.push_note('AM2 Bot', notif)
 
 # Ajouter la détecteion des avions pour les envoyer au garage
 browser.get('https://www.airlines-manager.com/shop/cardholder')
