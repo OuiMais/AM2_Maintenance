@@ -120,8 +120,6 @@ secondesInt = 0
 
 try:
     cardSeconds = browser.find_element(By.CLASS_NAME, "amCountDown_seconds")
-    cardMinutes = browser.find_element(By.CLASS_NAME, "amCountDown_minutes")
-    cardHours = browser.find_element(By.CLASS_NAME, "amCountDown_hours")
 except NoSuchElementException:
     time.sleep(1)
 
@@ -130,13 +128,18 @@ if cardSeconds != '':
     secondes = secondes[:-1]
     secondesInt = int(secondes)
 
-    minutes = cardMinutes.text
-    minutes = minutes[:-1]
-    minutesInt = int(minutes)
+    cardMinutes = browser.find_element(By.CLASS_NAME, "amCountDown_minutes")
+    cardHours = browser.find_element(By.CLASS_NAME, "amCountDown_hours")
 
-    hours = cardHours.text
-    hours = hours[:-1]
-    hoursInt = int(hours)
+    if cardMinutes != '':
+        minutes = cardMinutes.text
+        minutes = minutes[:-1]
+        minutesInt = int(minutes)
+
+    if cardHours != '':
+        hours = cardHours.text
+        hours = hours[:-1]
+        hoursInt = int(hours)
 
     waitingTime = secondesInt + (minutesInt + hoursInt * 60) * 60
 
@@ -184,11 +187,10 @@ if freeCard != '':
         push = pb.push_note('AM2 Bot', notif)
     else:
         # Envoie d'une notification
-        notif = "Carte gratuite indisponible."
+        notif = "Carte gratuite disponible dans " + str(hoursInt) + ":" + str(minutesInt) + ":" + str(secondesInt) + "."
         push = pb.push_note('AM2 Bot', notif)
 else:
     # Envoie d'une notification
-
     notif = "Carte gratuite disponible dans " + str(hoursInt) + ":" + str(minutesInt) + ":" + str(secondesInt) + "."
     push = pb.push_note('AM2 Bot', notif)
 

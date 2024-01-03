@@ -81,8 +81,12 @@ if endOfElement != '':
                 time.sleep(5)
                 finish += 1
 
-    notif = str(finish) + " maintenance(s) terminée(s)."
-    push = pb.push_note('AM2 Bot', notif)
+    if finish != 0:
+        notif = str(finish) + " maintenance(s) terminée(s)."
+        push = pb.push_note('AM2 Bot', notif)
+    else:
+        notif = "Pas de maintenance à terminer."
+        push = pb.push_note('AM2 Bot', notif)
 else:
     # Envoie d'une notification
     notif = "Pas de maintenance à terminer."
