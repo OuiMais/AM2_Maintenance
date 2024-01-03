@@ -1,7 +1,7 @@
 """
     Projet : AM2_Auto / autoDailyGift
     Date Creation : 22/11/2023
-    Date Revision : 29/12/2023
+    Date Revision : 03/01/2024
     Entreprise : 3SC4P3
     Auteur: Florian HOFBAUER
     Contact :
@@ -110,8 +110,45 @@ while freeWorkshop != '':
 # Ajouter la détecteion des avions pour les envoyer au garage
 browser.get('https://www.airlines-manager.com/shop/cardholder')
 
+cardSeconds = ''
+cardMinutes = ''
+cardHours = ''
+waitingTime = 0
+hoursInt = 0
+minutesInt = 0
+secondesInt = 0
+
 try:
-    freeCard = browser.find_element(By.XPATH, "//button[@class='cardholder-cardinfo-button validBtnBlue' and 'Gratuit']")
+    cardSeconds = browser.find_element(By.CLASS_NAME, "amCountDown_seconds")
+    cardMinutes = browser.find_element(By.CLASS_NAME, "amCountDown_minutes")
+    cardHours = browser.find_element(By.CLASS_NAME, "amCountDown_hours")
+except NoSuchElementException:
+    time.sleep(1)
+
+if cardSeconds != '':
+    secondes = cardSeconds.text
+    secondes = secondes[:-1]
+    secondesInt = int(secondes)
+
+    minutes = cardMinutes.text
+    minutes = minutes[:-1]
+    minutesInt = int(minutes)
+
+    hours = cardHours.text
+    hours = hours[:-1]
+    hoursInt = int(hours)
+
+    waitingTime = secondesInt + (minutesInt + hoursInt * 60) * 60
+
+    if waitingTime < 900:
+        time.sleep(waitingTime)
+        browser.get('https://www.airlines-manager.com/shop/cardholder')
+
+time.sleep(5)
+
+try:
+    freeCard = browser.find_element(By.XPATH,
+                                    "//button[@class='cardholder-cardinfo-button validBtnBlue' and 'Gratuit']")
 except NoSuchElementException:
     freeCard = ''
     time.sleep(1)
@@ -120,7 +157,8 @@ if freeCard != '':
     freeCard.click()
     time.sleep(2)
     try:
-        gratuit_button = browser.find_element(By.XPATH, "//div[@class='buyCardHolder-containCard-buy']//a[contains(text(), 'Gratuit')]")
+        gratuit_button = browser.find_element(By.XPATH,
+                                              "//div[@class='buyCardHolder-containCard-buy']//a[contains(text(), 'Gratuit')]")
     except NoSuchElementException:
         gratuit_button = ''
 
@@ -150,7 +188,8 @@ if freeCard != '':
         push = pb.push_note('AM2 Bot', notif)
 else:
     # Envoie d'une notification
-    notif = "Carte gratuite indisponible."
+
+    notif = "Carte gratuite disponible dans " + str(hoursInt) + ":" + str(minutesInt) + ":" + str(secondesInt) + "."
     push = pb.push_note('AM2 Bot', notif)
 
 browser.close()
